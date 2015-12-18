@@ -28,20 +28,26 @@ CREATE TABLE matches ( match_id SERIAL PRIMARY KEY,
 CREATE VIEW win_total as
             SELECT players.player_id as id, players.player_name as name,
                    COUNT(matches.win) as wins
-                   FROM players LEFT JOIN matches ON players.player_id = matches.win
-                   GROUP BY players.player_id ORDER BY wins;
+                   FROM players 
+                   LEFT JOIN matches ON players.player_id = matches.win
+                   GROUP BY players.player_id 
+                   ORDER BY wins;
 
 -- Loss total counts the number of losses for each player.
 CREATE VIEW loss_total as 
             SELECT players.player_id as id, players.player_name as name,
                    COUNT(matches.loss) as losses
-                   FROM players LEFT JOIN matches ON players.player_id = matches.loss
-                   GROUP BY players.player_id ORDER BY losses;
+                   FROM players 
+                   LEFT JOIN matches ON players.player_id = matches.loss
+                   GROUP BY players.player_id 
+                   ORDER BY losses;
 
 -- Standings is a ranked chart of players by most wins then fewest losses.
 CREATE VIEW standings as
             SELECT win_total.id as id,
                    win_total.name as name, win_total.wins as wins, loss_total.losses as losses,
                    win_total.wins + loss_total.losses as matches
-                   FROM win_total INNER JOIN loss_total
-                   ON win_total.id = loss_total.id ORDER BY wins DESC, losses;
+                   FROM win_total 
+                   INNER JOIN loss_total
+                   ON win_total.id = loss_total.id 
+                   ORDER BY wins DESC, losses;
